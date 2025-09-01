@@ -3,9 +3,12 @@
 [![Analyses](https://github.com/suren-atoyan/react-pwa/actions/workflows/analyses.yml/badge.svg)](https://github.com/suren-atoyan/react-pwa/actions/workflows/analyses.yml)
 [![E2E Tests](https://github.com/suren-atoyan/react-pwa/actions/workflows/tests:e2e.yml/badge.svg)](https://github.com/suren-atoyan/react-pwa/actions/workflows/tests:e2e.yml)
 
+
 <a href="http://react-pwa.surenatoyan.com/" target="_blank" rel="noreferrer">
  <img src="./public/cover.png" title="React-PWA Starter Kit" alt="React-PWA cover image">
 </a>
+
+## 注意会有浏览器缓存,切换项目的时候记得清楚缓存
 
 ## 🌟 Overview
 
