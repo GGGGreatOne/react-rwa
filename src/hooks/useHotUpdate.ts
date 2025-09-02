@@ -110,6 +110,7 @@ export const useHotUpdate = (): UseHotUpdateReturn => {
             if (newWorker) {
               newWorker.addEventListener('statechange', () => {
                 if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  console.log('controller', navigator.serviceWorker.controller)
                   setUpdateInfo(prev => ({ ...prev, hasUpdate: true }));
                 }
               });

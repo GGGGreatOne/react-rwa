@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import {Fragment, useEffect} from 'react';
 import { BrowserRouter } from 'react-router';
 
 import { CssBaseline } from '@mui/material';
@@ -14,6 +14,19 @@ import PWAInstallPrompt from './components/PWAInstallPrompt';
 import HotUpdateManager from './components/HotUpdateManager';
 
 function App() {
+  useEffect(() => {
+    if (!navigator.setAppBadge) {
+      console.log("The App Badging API is unsupported!");
+    } else {
+      let count = 0
+      setInterval(() => {
+        if (count > 20) {
+          count = 0
+        }
+        navigator.setAppBadge(count++).then();
+      }, 60000)
+    }
+  }, []);
   return (
     <Fragment>
       <BrowserRouter>
