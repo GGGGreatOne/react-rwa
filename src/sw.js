@@ -3,7 +3,7 @@ const CACHE_NAME = 'react-pwa-v1';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/manifest.json'
+  '/manifest.webmanifest'
 ];
 
 // 安装事件 - 缓存资源
