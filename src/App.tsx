@@ -23,7 +23,9 @@ function App() {
         if (count > 20) {
           count = 0
         }
-        navigator.setAppBadge(count++).then();
+        navigator.setAppBadge(count++).then(() => {
+          console.log()
+        });
       }, 60000)
     }
   }, []);
