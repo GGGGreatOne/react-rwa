@@ -10,6 +10,8 @@ import Pages from './routes/Pages';
 import Header from './sections/Header';
 import HotKeys from './sections/HotKeys';
 import Sidebar from './sections/Sidebar';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
+import HotUpdateManager from './components/HotUpdateManager';
 
 function App() {
   return (
@@ -20,6 +22,12 @@ function App() {
         <Header />
         <Sidebar />
         <Pages />
+        <PWAInstallPrompt />
+        <HotUpdateManager
+          autoCheck={false}
+          checkInterval={5 * 60 * 1000} // 5分钟检查一次
+          showVersion={true}
+        />
       </BrowserRouter>
     </Fragment>
   );

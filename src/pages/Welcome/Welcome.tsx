@@ -20,6 +20,7 @@ function Welcome() {
     <>
       <meta name="title" content="Welcome" />
       <FullSizeCentered flexDirection={isPortrait ? 'column' : 'row'}>
+        7777
         <Image alt="react-router" src={rrLogo} />
         <Image alt="vite" src={viteLogo} />
         <Image alt="typescript" src={tsLogo} />
