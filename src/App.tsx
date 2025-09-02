@@ -16,9 +16,9 @@ import HotUpdateManager from './components/HotUpdateManager';
 function App() {
   return (
     <Fragment>
-      <CssBaseline />
-      <HotKeys />
       <BrowserRouter>
+        <CssBaseline />
+        <HotKeys />
         <Header />
         <Sidebar />
         <Pages />
