@@ -1,5 +1,6 @@
 import { writeFileSync, readFileSync } from 'fs';
 import { join } from 'path';
+import { execSync } from 'child_process';
 
 // 版本管理工具
 class VersionManager {
@@ -30,7 +31,6 @@ class VersionManager {
     // 尝试获取git commit hash
     let commitHash: string | undefined;
     try {
-      const { execSync } = require('child_process');
       commitHash = execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim();
     } catch (error) {
       // 如果获取失败，忽略
@@ -64,9 +64,7 @@ class VersionManager {
 }
 
 // 如果直接运行此脚本
-if (require.main === module) {
-  const versionManager = new VersionManager();
-  versionManager.writeVersionFile();
-}
+const versionManager = new VersionManager();
+versionManager.writeVersionFile();
 
 export default VersionManager;

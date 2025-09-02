@@ -96,12 +96,6 @@ export default defineConfig({
       // 热更新配置
       injectManifest: {
         injectionPoint: undefined,
-      },
-      // 自定义Service Worker配置
-      customExtras: {
-        // 添加热更新相关的配置
-        skipWaiting: true,
-        clientsClaim: true,
       }
     }),
   ],
