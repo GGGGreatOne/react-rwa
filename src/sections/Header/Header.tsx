@@ -5,7 +5,7 @@ import { AppBar, Button, Divider, IconButton, Stack, Toolbar, Tooltip } from '@m
 
 import { useNotifications } from '@toolpad/core/useNotifications';
 
-import { repository, title } from '@/config';
+import { repository } from '@/config';
 import { useHotKeysDialog } from '@/sections/HotKeys/hooks';
 import { useSidebar } from '@/sections/Sidebar/hooks';
 import { useThemeMode } from '@/theme';
@@ -46,7 +46,7 @@ function Header() {
               <MenuIcon />
             </IconButton>
             <Button onClick={showNotification} color="info">
-              {title}
+              Notification
             </Button>
           </Stack>
           <Stack direction="row" alignItems="center">
