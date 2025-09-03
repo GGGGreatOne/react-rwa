@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect} from 'react';
+import {Fragment, useEffect} from 'react';
 import { BrowserRouter } from 'react-router';
 
 import { CssBaseline } from '@mui/material';
@@ -12,7 +12,6 @@ import HotKeys from './sections/HotKeys';
 import Sidebar from './sections/Sidebar';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import HotUpdateManager from './components/HotUpdateManager';
-import PushMessageManagerWrapper from './components/PushMessageManagerWrapper';
 import PushMessageManager from "@/components/PushMessageManager";
 
 function App() {
