@@ -23,7 +23,6 @@ import {
   IconButton
 } from '@mui/material';
 import {
-  Notifications,
   NotificationsActive,
   NotificationsOff,
   Send,
@@ -56,11 +55,11 @@ const PushMessageManager: React.FC = () => {
 
   useEffect(() => {
     checkSubscriptionStatus();
-    
+
     // 订阅推送消息
     const unsubscribe = mockBackendService.subscribe((message) => {
       setMessages(prev => [message, ...prev]);
-      
+
       // 显示系统通知
       if ('Notification' in window && Notification.permission === 'granted') {
         new Notification(message.title, {
@@ -243,7 +242,7 @@ const PushMessageManager: React.FC = () => {
             <Typography variant="h6" sx={{ mb: 2 }}>
               推送消息管理
             </Typography>
-            
+
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
               <FormControlLabel
                 control={
@@ -342,8 +341,8 @@ const PushMessageManager: React.FC = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShowTestDialog(false)} disabled={loading}>取消</Button>
-          <Button 
-            onClick={handleSendTestMessage} 
+          <Button
+            onClick={handleSendTestMessage}
             variant="contained"
             disabled={loading || !testTitle.trim() || !testBody.trim()}
             startIcon={loading ? <CircularProgress size={16} /> : undefined}

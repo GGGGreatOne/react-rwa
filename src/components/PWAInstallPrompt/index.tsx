@@ -31,7 +31,7 @@ const PWAInstallPrompt = () => {
     // 检查是否已经安装
     const checkIfInstalled = () => {
       if (window.matchMedia('(display-mode: standalone)').matches || 
-          (window.navigator as any).standalone === true) {
+          (window.navigator as Navigator & { standalone?: boolean }).standalone === true) {
         setIsInstalled(true);
       }
     };

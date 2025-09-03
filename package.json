@@ -21,6 +21,7 @@
     "https-preview": "serve dist",
     "prettier:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "lint:check": "eslint --max-warnings=0 \"src/**/*.{js,jsx,ts,tsx,json}\"",
+    "lint:fix": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
     "ts:check": "tsc --noEmit",
     "test:unit": "vitest src",
     "test:e2e": "playwright test",

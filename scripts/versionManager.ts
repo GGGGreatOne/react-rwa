@@ -32,7 +32,7 @@ class VersionManager {
     let commitHash: string | undefined;
     try {
       commitHash = execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim();
-    } catch (error) {
+    } catch {
       // 如果获取失败，忽略
     }
 

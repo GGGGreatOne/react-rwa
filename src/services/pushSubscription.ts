@@ -151,12 +151,15 @@ class PushSubscriptionService {
   }
 
   // 转换订阅对象格式
-  private convertSubscription(subscription: any): PushSubscription {
+  private convertSubscription(subscription: globalThis.PushSubscription): PushSubscription {
+    const p256dh = subscription.getKey('p256dh');
+    const auth = subscription.getKey('auth');
+    
     return {
       endpoint: subscription.endpoint,
       keys: {
-        p256dh: this.arrayBufferToBase64(subscription.getKey('p256dh')),
-        auth: this.arrayBufferToBase64(subscription.getKey('auth'))
+        p256dh: p256dh ? this.arrayBufferToBase64(p256dh) : '',
+        auth: auth ? this.arrayBufferToBase64(auth) : ''
       }
     };
   }
