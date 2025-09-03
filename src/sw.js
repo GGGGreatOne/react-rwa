@@ -114,6 +114,53 @@ self.addEventListener('message', (event) => {
       timestamp: Date.now()
     });
   }
+
+  // 处理测试推送消息
+  if (event.data && event.data.type === 'TEST_PUSH_MESSAGE') {
+    console.log('Service Worker收到测试推送消息:', event.data);
+    console.log('Service Worker状态:', {
+      registration: !!self.registration,
+      permission: 'Service Worker中无法直接访问Notification.permission'
+    });
+    
+    const { title, body } = event.data;
+    
+    try {
+      const notificationPromise = self.registration.showNotification(title, {
+        body,
+        icon: '/pwa-192x192.png',
+        badge: '/pwa-192x192.png',
+        tag: 'test-message',
+        data: {
+          url: '/',
+          timestamp: Date.now()
+        },
+        actions: [
+          {
+            action: 'view',
+            title: '查看',
+            icon: '/pwa-192x192.png'
+          },
+          {
+            action: 'dismiss',
+            title: '忽略',
+            icon: '/pwa-192x192.png'
+          }
+        ],
+        requireInteraction: false,
+        silent: false,
+        vibrate: [200, 100, 200]
+      });
+      
+      notificationPromise.then(() => {
+        console.log('通知显示成功');
+      }).catch((error) => {
+        console.error('通知显示失败:', error);
+      });
+    } catch (error) {
+      console.error('创建通知时出错:', error);
+    }
+  }
 });
 
 // 定期检查更新
@@ -211,7 +258,8 @@ self.addEventListener('notificationclick', (event) => {
         // 如果需要，可以发送消息到页面
         clients[0].postMessage({
           type: 'NOTIFICATION_CLICKED',
-          data: event.notification.data
+          data: event.notification.data,
+          tag: event.notification.tag
         });
       } else {
         // 如果没有窗口打开，打开新窗口

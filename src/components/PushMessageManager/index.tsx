@@ -82,7 +82,27 @@ const PushMessageManager: React.FC = () => {
     // 获取历史消息
     setMessages(mockBackendService.getHistoryMessages());
 
-    return unsubscribe;
+    // 监听Service Worker消息
+    const handleServiceWorkerMessage = (event: MessageEvent) => {
+      if (event.data && event.data.type === 'NOTIFICATION_CLICKED') {
+        console.log('通知被点击:', event.data);
+        // 可以在这里添加处理逻辑，比如显示消息详情
+        if (event.data.tag === 'test-message') {
+          setSnackbar({
+            open: true,
+            message: '测试消息被点击',
+            severity: 'info'
+          });
+        }
+      }
+    };
+
+    navigator.serviceWorker?.addEventListener('message', handleServiceWorkerMessage);
+
+    return () => {
+      unsubscribe();
+      navigator.serviceWorker?.removeEventListener('message', handleServiceWorkerMessage);
+    };
   }, []);
 
   const checkSubscriptionStatus = async () => {
@@ -260,14 +280,36 @@ const PushMessageManager: React.FC = () => {
                 {loading ? '发送中...' : '发送测试消息'}
               </Button>
 
-              <Button
-                variant="outlined"
-                startIcon={<History />}
-                onClick={() => setShowHistory(true)}
-                size="small"
-              >
-                查看历史 ({messages.length})
-              </Button>
+                             <Button
+                 variant="outlined"
+                 startIcon={<History />}
+                 onClick={() => setShowHistory(true)}
+                 size="small"
+               >
+                 查看历史 ({messages.length})
+               </Button>
+
+               <Button
+                 variant="outlined"
+                 startIcon={<Info />}
+                 onClick={() => {
+                   if (Notification.permission === 'granted') {
+                     new Notification('测试通知', {
+                       body: '这是一个直接测试通知',
+                       icon: '/pwa-192x192.png'
+                     });
+                   } else {
+                     setSnackbar({
+                       open: true,
+                       message: '通知权限未授予',
+                       severity: 'warning'
+                     });
+                   }
+                 }}
+                 size="small"
+               >
+                 测试通知权限
+               </Button>
             </Box>
           </CardContent>
         </Card>

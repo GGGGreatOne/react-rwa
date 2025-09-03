@@ -207,6 +207,12 @@ class PushSubscriptionService {
         return false;
       }
 
+      // 检查通知权限
+      if (Notification.permission !== 'granted') {
+        console.error('通知权限未授予，当前权限:', Notification.permission);
+        return false;
+      }
+
       // 这里应该发送到实际的推送服务器
       // 现在我们只是模拟发送
       console.log('发送推送消息到服务器:', {
@@ -216,16 +222,56 @@ class PushSubscriptionService {
 
       // 模拟服务器响应
       setTimeout(() => {
-        this.registration?.showNotification(title, {
-          body,
-          icon: '/pwa-192x192.png',
-          badge: '/pwa-192x192.png',
-          tag: 'test-message',
-          data: {
-            url: '/',
-            timestamp: Date.now()
-          }
+        console.log('准备发送测试消息到Service Worker');
+        console.log('Service Worker状态:', {
+          registration: !!this.registration,
+          active: !!this.registration?.active,
+          permission: Notification.permission
         });
+        
+        // 通过Service Worker发送测试消息
+        if (this.registration && this.registration.active) {
+          console.log('Service Worker活跃，发送消息');
+          this.registration.active.postMessage({
+            type: 'TEST_PUSH_MESSAGE',
+            title,
+            body
+          });
+          
+          // 同时尝试直接显示通知作为备用
+          setTimeout(() => {
+            console.log('尝试直接显示通知作为备用');
+            this.registration?.showNotification(title, {
+              body,
+              icon: '/pwa-192x192.png',
+              badge: '/pwa-192x192.png',
+              tag: 'test-message-direct',
+              data: {
+                url: '/',
+                timestamp: Date.now()
+              },
+              requireInteraction: false,
+              silent: false
+            });
+          }, 2000);
+        } else {
+          console.log('Service Worker不可用，直接显示通知');
+          // 如果Service Worker不可用，直接显示通知
+          if (this.registration) {
+            this.registration.showNotification(title, {
+              body,
+              icon: '/pwa-192x192.png',
+              badge: '/pwa-192x192.png',
+              tag: 'test-message',
+              data: {
+                url: '/',
+                timestamp: Date.now()
+              },
+              requireInteraction: false,
+              silent: false
+            });
+          }
+        }
       }, 1000);
 
       return true;
