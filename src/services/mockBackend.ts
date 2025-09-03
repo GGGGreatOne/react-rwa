@@ -13,14 +13,24 @@ export interface PushMessage {
 class MockBackendService {
   private messageQueue: PushMessage[] = [];
   private subscribers: ((message: PushMessage) => void)[] = [];
+  private isDevelopment: boolean;
 
   constructor() {
-    // 模拟定期推送消息
-    this.startMockPushService();
+    this.isDevelopment = import.meta.env.DEV;
+    
+    // 只在开发环境中启动模拟推送服务
+    if (this.isDevelopment) {
+      this.startMockPushService();
+    }
   }
 
   // 订阅推送消息
   subscribe(callback: (message: PushMessage) => void) {
+    // 在生产环境中不提供订阅功能
+    if (!this.isDevelopment) {
+      return () => {}; // 返回空函数
+    }
+    
     this.subscribers.push(callback);
     return () => {
       const index = this.subscribers.indexOf(callback);
@@ -113,6 +123,11 @@ class MockBackendService {
 
   // 手动发送测试消息
   sendTestMessage(title: string, body: string) {
+    // 在生产环境中不发送测试消息
+    if (!this.isDevelopment) {
+      return;
+    }
+    
     const message: PushMessage = {
       id: `test_${Date.now()}`,
       title,
@@ -130,6 +145,10 @@ class MockBackendService {
 
   // 获取历史消息
   getHistoryMessages(): PushMessage[] {
+    // 在生产环境中返回空数组
+    if (!this.isDevelopment) {
+      return [];
+    }
     return [...this.messageQueue];
   }
 }

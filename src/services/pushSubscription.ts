@@ -17,8 +17,10 @@ interface VapidConfig {
 class PushSubscriptionService {
   private registration: ServiceWorkerRegistration | null = null;
   private vapidConfig: VapidConfig | null = null;
+  private isDevelopment: boolean;
 
   constructor() {
+    this.isDevelopment = import.meta.env.DEV;
     this.init();
     this.loadVapidConfig();
   }
@@ -201,8 +203,14 @@ class PushSubscriptionService {
     return window.btoa(binary);
   }
 
-  // 发送测试推送消息到服务器 (模拟)
+    // 发送测试推送消息到服务器 (模拟)
   async sendTestPushMessage(title: string, body: string): Promise<boolean> {
+    // 在生产环境中不发送测试消息
+    if (!this.isDevelopment) {
+      console.log('生产环境中不发送测试消息');
+      return false;
+    }
+
     try {
       const { subscription } = await this.getSubscriptionStatus();
       if (!subscription) {
@@ -231,7 +239,7 @@ class PushSubscriptionService {
           active: !!this.registration?.active,
           permission: Notification.permission
         });
-
+        
         // 通过Service Worker发送测试消息
         if (this.registration && this.registration.active) {
           console.log('Service Worker活跃，发送消息');
@@ -240,7 +248,7 @@ class PushSubscriptionService {
             title,
             body
           });
-
+          
           // 同时尝试直接显示通知作为备用
           setTimeout(() => {
             console.log('尝试直接显示通知作为备用');
