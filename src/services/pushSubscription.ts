@@ -154,7 +154,7 @@ class PushSubscriptionService {
   private convertSubscription(subscription: globalThis.PushSubscription): PushSubscription {
     const p256dh = subscription.getKey('p256dh');
     const auth = subscription.getKey('auth');
-    
+
     return {
       endpoint: subscription.endpoint,
       keys: {
@@ -165,9 +165,9 @@ class PushSubscriptionService {
   }
 
   // VAPID 公钥 (从配置文件获取)
-  private getVapidPublicKey(): string {
-    return this.vapidConfig?.publicKey || 'BNcRdRSTGJOtTstkq6iu_BbYjSjuq26qjzO91qeBOGpeJVEj5l7u1baKVxRP0HeT5P8js5HXrWMTN1I3AIK1ZQ';
-  }
+  // private getVapidPublicKey(): string {
+  //   return this.vapidConfig?.publicKey || 'BNcRdRSTGJOtTstkq6iu_BbYjSjuq26qjzO91qeBOGpeJVEj5l7u1baKVxRP0HeT5P8js5HXrWMTN1I3AIK1ZQ';
+  // }
 
   // 将 base64 字符串转换为 Uint8Array
   private urlBase64ToUint8Array(base64String: string): Uint8Array {
@@ -231,7 +231,7 @@ class PushSubscriptionService {
           active: !!this.registration?.active,
           permission: Notification.permission
         });
-        
+
         // 通过Service Worker发送测试消息
         if (this.registration && this.registration.active) {
           console.log('Service Worker活跃，发送消息');
@@ -240,7 +240,7 @@ class PushSubscriptionService {
             title,
             body
           });
-          
+
           // 同时尝试直接显示通知作为备用
           setTimeout(() => {
             console.log('尝试直接显示通知作为备用');
@@ -285,4 +285,4 @@ class PushSubscriptionService {
   }
 }
 
-export const pushSubscriptionService = new PushSubscriptionService(); 
+export const pushSubscriptionService = new PushSubscriptionService();
