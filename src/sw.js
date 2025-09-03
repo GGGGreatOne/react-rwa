@@ -133,3 +133,96 @@ async function checkForUpdates() {
     console.error('检查更新失败:', error);
   }
 }
+
+// 推送消息处理
+self.addEventListener('push', (event) => {
+  console.log('收到推送消息:', event);
+  
+  let notificationData = {
+    title: '新消息',
+    body: '您有一条新消息',
+    icon: '/pwa-192x192.png',
+    badge: '/pwa-192x192.png',
+    tag: 'default',
+    data: {
+      url: '/',
+      timestamp: Date.now()
+    }
+  };
+
+  // 如果有推送数据，使用推送数据
+  if (event.data) {
+    try {
+      const data = event.data.json();
+      notificationData = {
+        ...notificationData,
+        ...data
+      };
+    } catch (error) {
+      console.error('解析推送数据失败:', error);
+      notificationData.body = event.data.text();
+    }
+  }
+
+  const options = {
+    body: notificationData.body,
+    icon: notificationData.icon,
+    badge: notificationData.badge,
+    tag: notificationData.tag,
+    data: notificationData.data,
+    actions: [
+      {
+        action: 'view',
+        title: '查看',
+        icon: '/pwa-192x192.png'
+      },
+      {
+        action: 'dismiss',
+        title: '忽略',
+        icon: '/pwa-192x192.png'
+      }
+    ],
+    requireInteraction: false,
+    silent: false,
+    vibrate: [200, 100, 200]
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(notificationData.title, options)
+  );
+});
+
+// 通知点击处理
+self.addEventListener('notificationclick', (event) => {
+  console.log('通知被点击:', event);
+  
+  event.notification.close();
+
+  if (event.action === 'dismiss') {
+    return;
+  }
+
+  // 默认行为或点击"查看"按钮
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window' }).then((clients) => {
+      // 如果已经有窗口打开，聚焦到该窗口
+      if (clients.length > 0) {
+        clients[0].focus();
+        // 如果需要，可以发送消息到页面
+        clients[0].postMessage({
+          type: 'NOTIFICATION_CLICKED',
+          data: event.notification.data
+        });
+      } else {
+        // 如果没有窗口打开，打开新窗口
+        self.clients.openWindow(event.notification.data?.url || '/');
+      }
+    })
+  );
+});
+
+// 通知关闭处理
+self.addEventListener('notificationclose', (event) => {
+  console.log('通知被关闭:', event);
+  // 可以在这里添加统计或清理逻辑
+});

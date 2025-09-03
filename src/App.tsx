@@ -1,4 +1,4 @@
-import {Fragment, useEffect} from 'react';
+import React, {Fragment, useEffect} from 'react';
 import { BrowserRouter } from 'react-router';
 
 import { CssBaseline } from '@mui/material';
@@ -12,8 +12,11 @@ import HotKeys from './sections/HotKeys';
 import Sidebar from './sections/Sidebar';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import HotUpdateManager from './components/HotUpdateManager';
+import PushMessageManagerWrapper from './components/PushMessageManagerWrapper';
+import PushMessageManager from "@/components/PushMessageManager";
 
 function App() {
+
   useEffect(() => {
     if (!navigator.setAppBadge) {
       console.log("The App Badging API is unsupported!");
@@ -29,12 +32,14 @@ function App() {
       }, 60000)
     }
   }, []);
+
   return (
     <Fragment>
       <BrowserRouter>
         <CssBaseline />
         <HotKeys />
         <Header />
+        <PushMessageManager />
         <Sidebar />
         <Pages />
         <PWAInstallPrompt />

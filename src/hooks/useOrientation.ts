@@ -5,19 +5,26 @@ function getOrientation() {
 }
 
 function useOrientation() {
-  const [isPortrait, setIsPortrait] = useState(getOrientation());
+  // 添加错误处理，确保React上下文可用
+  try {
+    const [isPortrait, setIsPortrait] = useState(getOrientation());
 
-  useEffect(() => {
-    function handleResize() {
-      setIsPortrait(getOrientation());
-    }
+    useEffect(() => {
+      function handleResize() {
+        setIsPortrait(getOrientation());
+      }
 
-    window.addEventListener('resize', handleResize);
+      window.addEventListener('resize', handleResize);
 
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+      return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
-  return isPortrait;
+    return isPortrait;
+  } catch (error) {
+    // 如果React上下文不可用，返回默认值
+    console.warn('React context not available in useOrientation, returning default value');
+    return window.innerHeight > window.innerWidth;
+  }
 }
 
 export default useOrientation;
